@@ -10,7 +10,7 @@ import (
 
 func main() {
 	userRequest := pb.UserRequest{
-		Id: 1234,
+		Id: 123,
 	}
 
 	grpc := config.InitGRPCConnection()
