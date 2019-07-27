@@ -1,39 +1,19 @@
 package main
 
 import (
-	"context"
-	"github.com/fannyhasbi/article-grpc-go/user/services"
 	"log"
 	"net"
 
 	pb "github.com/fannyhasbi/article-grpc-go/user/proto"
+	"github.com/fannyhasbi/article-grpc-go/user/server/grpc/handler"
+	"github.com/fannyhasbi/article-grpc-go/user/services"
 	"google.golang.org/grpc"
 )
-
-// UserServer implement UserServiceServer interface
-type UserServer struct {
-	Service *services.UserService
-}
-
-// FindUserByID find a user by ID
-func (us UserServer) FindUserByID(ctx context.Context, ur *pb.UserRequest) (*pb.UserResponse, error) {
-	result := us.Service.Query.FindUserByID(ur.Id)
-	if result.Error != nil {
-		return &pb.UserResponse{}, result.Error
-	}
-	if result.Result == nil {
-		return &pb.UserResponse{}, result.Error
-	}
-
-	user := result.Result.(pb.UserResponse)
-
-	return &user, nil
-}
 
 func main() {
 	port := ":9000"
 	srv := grpc.NewServer()
-	var userServer UserServer
+	var userServer handler.UserServer
 
 	userServer.Service = services.NewUserService()
 
